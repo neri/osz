@@ -1,0 +1,7 @@
+bios.o: bios.cpp 8086run.h tty.h
+debug.o: debug.cpp 8086run.h
+interp.o: interp.cpp 8086run.h
+io.o: io.cpp 8086run.h
+keyboard.o: keyboard.cpp 8086run.h
+main.o: main.cpp 8086run.h tty.h
+tty.o: tty.cpp 8086run.h

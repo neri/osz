@@ -1,0 +1,33 @@
+.DS_Store
+Thumbs.db
+a.out
+*.log
+*.swp
+*.tmp
+*.lnk
+*~
+*#*
+__*__
+var
+bin
+*.o
+*.bin
+
+# xcode noise
+build
+*.app
+*.ipa
+*.xcworkspace/*
+!*.xcworkspace/contents.xcworkspacedata
+xcuserdata
+xcshareddata
+
+# Visual Studio
+*.suo
+*.opensdf
+*.sdf
+*.user
+*.obj
+*.ipch
+Debug
+Release
