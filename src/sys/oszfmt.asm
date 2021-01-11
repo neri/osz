@@ -68,12 +68,11 @@ _HEAD:
 	db 0xCB, 0x1A
 	dw _init
 
-	alignb 2
-saved_imr			dw 0
-
 	alignb 4
 tick_count			dd 0
 saved_irq00			dd 0
+
+saved_imr			dw 0
 
 tvram_crtc_fa1		dw 0
 tvram_offset		dd 0
@@ -561,13 +560,7 @@ _bios_set_color:
 
 _bios_cls:
 	; call _hide_cursor
-	mov dx, 0x0440
-	mov ax, 0x15
-	out dx, ax
-	inc dx
-	inc dx
 	xor eax, eax
-	out dx, ax
 	mov es, ax
 	mov [cs:cons_cursor], ax
 	mov [cs:tvram_crtc_fa1], ax
@@ -575,6 +568,13 @@ _bios_cls:
 	mov edi, [cs:base_tvram]
 	mov ecx, 1024 * 512 / 8
 	rep a32 stosd
+	mov dx, 0x0440
+	mov ax, 0x15
+	out dx, ax
+	inc dx
+	inc dx
+	xor ax, ax
+	out dx, ax
 	ret
 
 
@@ -753,16 +753,18 @@ _init:
 	; Init keyboard
 	mov al, 0x81
 	out 0x60, al
-	mov al, 0x01
 	mov dx, 0x0604
+	mov al, 0x01
 	out dx, al
-	dec dx
-	dec dx
+	mov dx, 0x0602
 	mov al, 0xA1
+	out dx, al
+	mov dx, 0x0604
+	mov al, 0x01
 	out dx, al
 
 	; mem lower
-	mov ax, 0xC000 ; TOWNS always >1MB
+	mov ax, 0xC000 ; TOWNS always 768KB
 	mov [es:bx + OSZ_SYSTBL_MEMSZ], ax
 
 	; joy pad
@@ -817,10 +819,7 @@ _init:
 	call _bios_set_color
 
 	; Init display
-	call _bios_cls
-
 	mov si, mode_ctrl
-
 	mov dx, 0x0440
 	mov al, 0x00
 	out dx, al
@@ -878,6 +877,18 @@ _init:
 	mov cx, 80*16*5 /2
 	xor ax, ax
 	rep stosw
+
+	call _bios_cls
+
+	; Display ON
+	mov dx, 0x0440
+	mov al, 0x1C
+	out dx, al
+	inc dx
+	inc dx
+	mov ax, [mode_ctrl + 0x1C * 2]
+	or ax, 0x8000
+	out dx, ax
 
 	mov ax, (_END_RESIDENT-_HEAD)/16
 	retf
