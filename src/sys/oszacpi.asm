@@ -26,7 +26,7 @@
 ;;	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;
 
-%define	DEBUG
+; %define	DEBUG
 %include "osz.inc"
 %include "oszbio.inc"
 

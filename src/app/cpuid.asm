@@ -131,6 +131,17 @@ _main:
 	int 0x21
 
 	mov di, _cpuid_string_buffer
+	mov si, useisa_msg
+	call _strcat
+	mov si, useisa_table
+	call _parse_isatbl
+	mov al, '$'
+	stosb
+	mov dx, _cpuid_string_buffer
+	mov ah, 9
+	int 0x21
+
+	mov di, _cpuid_string_buffer
 	mov si, sysisa_msg
 	call _strcat
 	mov si, sysisa_table
@@ -427,6 +438,7 @@ _386_msg		db "80386$"
 _486_msg		db "Early 486$"
 
 cpuid_msg		db 13, 10, "MAX CPUID: ", 0
+useisa_msg		db 13, 10, "USR:", 0
 isa_msg			db 13, 10, "ISA:", 0
 sysisa_msg		db 13, 10, "SYS:", 0
 
@@ -459,6 +471,19 @@ sysisa_table:
 	db CPUID_F01C,  5, 4, "VT-x"
 	db CPUID_F81C,  2, 5, "AMD-v"
 	db CPUID_F01C, 31, 10, "HYPERVISOR"
+
+	db 0
+
+useisa_table:
+	db CPUID_F01D,  4, 3, "TSC"
+	db CPUID_F01D, 15, 4, "CMOV"
+	db CPUID_F01C, 22, 5, "MOVBE"
+	db CPUID_F01C, 23, 6, "POPCNT"
+	db CPUID_F01C, 30, 5, "RDRND"
+	db CPUID_F81D, 27, 6, "RDTSCP"
+	db CPUID_F07B,  3, 4, "BMI1"
+	db CPUID_F07B,  8, 4, "BMI2"
+	db CPUID_F07B, 29, 3, "SHA"
 
 	db 0
 

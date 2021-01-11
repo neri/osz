@@ -51,7 +51,7 @@ end
 
 desc "Run with qemu"
 task :runqemu => :default do
-  sh "qemu-system-x86_64 -k ja -m 256 -boot a -fda #{ PATH_FULL_IMG } -localtime -M pc"
+  sh "qemu-system-x86_64 -cpu max -k ja -m 256 -boot a -fda #{ PATH_FULL_IMG } -rtc base=localtime,clock=host -M pc"
 end
 
 
